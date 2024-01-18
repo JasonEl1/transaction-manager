@@ -1,10 +1,12 @@
-version = "0.0.1"
-balance_path = "./balance.txt"
+version = "0.0.2"
+
+user = input("User: ")
+balance_path = f"/Users/{user}/Downloads/transaction-manager/balance.txt"
 
 try:
     current_balance = float(open(balance_path, "r").read())
 except:
-    print(f"v.{version}: Please make sure you are running the command from the correct directory")
+    print(f"v{version}: Please make sure you are running the command from the correct directory")
     exit()
 
 def print_balance():
@@ -22,7 +24,7 @@ def remove_amount(amount):
     print(f'removed {str(amount)} to balance')
     file_write.close()
 
-print(f'Transaction Manager v.{version}')
+print(f'Transaction Manager v{version}')
 print("enter 'help' for a list of commands")
 print("-----------------------------------")
 

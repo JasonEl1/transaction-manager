@@ -16,5 +16,3 @@ Once editing the file, insert the following line:
 Note that this is the default download location but you can edit this line to suit your preferences. You can also change the alias name from `cash` to anything else you want it to be.
 
 Save the file and restart the terminal. Entering `cash` into the terminal will start the command line script.
-
-**As of v.0.0.1 the created alias only works if run from within the `transaction-manager` directory. As a workaround, edit the first line of `transactions.py` to include the full absolute path to the balance.txt file.**
