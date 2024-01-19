@@ -33,13 +33,26 @@ enter `cash` (or alternative chosen alias) into the terminal, followed by either
 
 ### Commands:
 
+**`normal` and `express` modes:**
 ```
 help -> display a list of valid commands
 get -> get current account balance
-set <balance> -> set new account balance
-add <amount> -> add specified amount to account balance
-remove <amount> -> remove specified amount from account balance
-exit -> close transaction-manager
 ```
-
-**Note that `exit` command is not available in `express` mode.**
+***
+**`normal` mode only:**
+```
+exit -> close transaction-manager
+set -> set new account balance
+add -> add specified amount to account balance
+remove -> remove specified amount from account balance
+log -> output recent transaction log entries
+```
+***
+**`express` mode only:**
+```
+set <balance> -> set new account balance
+add <amount> -> add specified <amount> to account balance
+remove <amount> -> remove specified <amount> from account balance
+log <entries> -> get last <entries> transaction log entries
+log clear -> clear all entries from transaction log
+```
