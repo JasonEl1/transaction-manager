@@ -5,7 +5,7 @@ from os import system
 from os.path import exists
 import subprocess
 
-version = "0.2.1"
+version = "0.2.2"
 mode = "normal"
 
 user = subprocess.getstatusoutput('id -un')
