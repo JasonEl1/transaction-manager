@@ -1,11 +1,11 @@
-from sre_constants import AT_BEGINNING_STRING
 import subprocess
 import sys
 from datetime import datetime
 from os import system
+from os.path import exists
 import subprocess
 
-version = "0.2.0"
+version = "0.2.1"
 mode = "normal"
 
 user = subprocess.getstatusoutput('id -un')
@@ -13,11 +13,16 @@ user = user[1]
 balance_path = f"/Users/{user}/Downloads/transaction-manager/balance.txt"
 log_path = f"/Users/{user}/Downloads/transaction-manager/transaction-log.txt"
 
+open(log_path, 'a').close()
+
+
 try:
     current_balance = float(open(balance_path, "r").read())
 except:
-    print("Invalid username")
-    exit()
+    print(f"Creating personal file at {balance_path}...")
+    with open(balance_path, 'w') as file_write:
+        file_write.write("0.00")
+        file_write.close()
 
 def clean_log():
     with open(log_path, "r") as f:
@@ -48,25 +53,29 @@ def print_help():
     print("-------------")
 
 def print_balance():
-    print(f'Your  balance is ${current_balance}')
+    bal = current_balance
+    bal = '%.2f' % bal
+    print(f'Your  balance is ${bal}')
 
 def add_amount(amount):
     with open(balance_path,"w") as file_write:
         file_write.write(str(current_balance+amount))
-        print(f'added {str(amount)} to balance')
+        amount = '%.2f' % amount
+        print(f'added ${str(amount)} to balance')
         file_write.close()
     with open(log_path,"a") as file_write:
-        file_write.write(f"\n{get_datetime()} Added S{amount} to balance.")
+        file_write.write(f"\n{get_datetime()} Added ${amount} to balance.")
         file_write.close()
 
 def remove_amount(amount):
     file_write = open(balance_path,"w")
+    amount = float('%.2f' % amount)
     file_write.write(str(current_balance-amount))
-    print(f'removed {str(amount)} to balance')
+    print(f'removed ${str(amount)} to balance')
     file_write.close()
 
     with open(log_path,"a") as file_write:
-        file_write.write(f"\n{get_datetime()} Removed S{amount} from balance.")
+        file_write.write(f"\n{get_datetime()} Removed ${'%.2f' % amount} from balance.")
 if mode == "normal":
 
     print(f'Transaction Manager v{version}')
@@ -100,10 +109,11 @@ if mode == "normal":
             with open(balance_path, "w") as file_write:
                 file_write.write(str(amount))
                 file_write.close()
+                amount = '%.2f' % amount
             with open(log_path,"a") as file_write:
-                file_write.write(f"\n{get_datetime()} Balance set to S{amount}.")
+                file_write.write(f"\n{get_datetime()} Balance set to ${amount}.")
                 file_write.close()
-            print(f"Balance set to {amount}")
+            print(f"Balance set to ${amount}")
         elif command == "add":
             amount = float(input("Amount to add: "))
             add_amount(amount)
@@ -158,9 +168,10 @@ elif mode == "express":
             with open(balance_path, "w") as file_write:
                 file_write.write(str(amount))
                 file_write.close()
-            print(f"Balance set to {amount}")
+                amount = '%.2f' % amount
+            print(f"Balance set to ${amount}")
             with open(log_path,"a") as file_write:
-                file_write.write(f"\n{get_datetime()} Balance set to ${sys.argv[2]}.")
+                file_write.write(f"\n{get_datetime()} Balance set to ${'%.2f' % float(sys.argv[2])}.")
                 file_write.close()
         else:
             print("No amount set")
@@ -194,6 +205,7 @@ elif mode == "express":
                     entries = int(sys.argv[2])
                     with open(log_path,"r") as file_read:
                         lines = file_read.readlines()
+                        lines = list(reversed(lines))
                         if len(lines)>0:
                             print("------------TRANSACTION LOG------------")
                             for x in range(int(entries)):
