@@ -52,6 +52,18 @@ def print_help():
     print("exit -> exit Transaction Manager")
     print("-------------")
 
+def print_help_express():
+    print("COMMANDS")
+    print("-------------")
+    print("get -> get current balance")
+    print("set <amount> -> set new balance")
+    print("add <amount> -> add funds")
+    print("remove <amount> -> remove funds")
+    print("log <entries> -> get most recent transaction log entries")
+    print("log clear -> clear all transaction log entries")
+    print("exit -> exit Transaction Manager")
+    print("-------------")
+
 def print_balance():
     bal = current_balance
     bal = '%.2f' % bal
@@ -155,7 +167,7 @@ elif mode == "express":
         file_read.close()
 
     if sys.argv[1]=="help":
-        print_help()
+        print_help_express()
     elif sys.argv[1] == "get":
         with open(balance_path, "r") as file_read:
             current_balance = file_read.read()
