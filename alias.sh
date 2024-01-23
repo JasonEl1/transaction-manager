@@ -2,7 +2,7 @@
 
 read -p "What name would you like to give this alias?: " aliasname
 
-new_entry="alias ${aliasname}='python3 /Users/$USER/Downloads/transaction-manager/transactions.py'"
+new_entry="alias ${aliasname}='python3 $(pwd)/transactions.py'"
 
 if grep -q "$new_entry" ~/.zshrc; then
     echo "alias already exists"

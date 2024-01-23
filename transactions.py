@@ -4,14 +4,13 @@ from datetime import datetime
 from os import system
 from os.path import exists
 import subprocess
+from pathlib import Path
 
-version = "0.2.2"
+version = "0.2.3"
 mode = "normal"
 
-user = subprocess.getstatusoutput('id -un')
-user = user[1]
-balance_path = f"/Users/{user}/Downloads/transaction-manager/balance.txt"
-log_path = f"/Users/{user}/Downloads/transaction-manager/transaction-log.txt"
+balance_path = f"{Path().absolute()}/balance.txt"
+log_path = f"{Path().absolute()}/transaction-log.txt"
 
 open(log_path, 'a').close()
 
