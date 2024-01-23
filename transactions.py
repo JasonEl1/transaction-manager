@@ -3,14 +3,17 @@ import sys
 from datetime import datetime
 from os import system
 from os.path import exists
-import subprocess
-from pathlib import Path
+import os
 
-version = "0.2.3"
+version = "0.2.4"
 mode = "normal"
 
-balance_path = f"{Path().absolute()}/balance.txt"
-log_path = f"{Path().absolute()}/transaction-log.txt"
+fullpath = os.path.abspath(__file__)
+name_len = len(os.path.basename(__file__))
+temppath = fullpath[:-name_len]
+
+balance_path = f"{temppath}/balance.txt"
+log_path = f"{temppath}/transaction-log.txt"
 
 open(log_path, 'a').close()
 
@@ -20,8 +23,8 @@ try:
 except:
     print(f"Creating personal file at {balance_path}...")
     with open(balance_path, 'w') as file_write:
-        file_write.write("0.00")
-        file_write.close()
+         file_write.write("0.00")
+         file_write.close()
 
 def clean_log():
     with open(log_path, "r") as f:
