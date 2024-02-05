@@ -5,7 +5,7 @@ from os import system
 from os.path import exists
 import os
 
-version = "0.2.4"
+version = "0.2.5"
 mode = "normal"
 
 fullpath = os.path.abspath(__file__)
@@ -63,7 +63,6 @@ def print_help_express():
     print("remove <amount> -> remove funds")
     print("log <entries> -> get most recent transaction log entries")
     print("log clear -> clear all transaction log entries")
-    print("exit -> exit Transaction Manager")
     print("-------------")
 
 def print_balance():
@@ -90,6 +89,22 @@ def remove_amount(amount):
 
     with open(log_path,"a") as file_write:
         file_write.write(f"\n{get_datetime()} Removed ${'%.2f' % amount} from balance.")
+
+def print_transaction_log(entries):
+    with open(log_path,"r") as file_read:
+        lines = file_read.readlines()
+        lines = list(reversed(lines))
+        if len(lines)>0:
+            print("------------TRANSACTION LOG---------------")
+            for x in range(int(entries)):
+                try:
+                    print(lines[x].strip("\n"))
+                except:
+                    break
+            print("------------------------------------------")
+        else:
+            print("No entries in log")
+        file_read.close()
 if mode == "normal":
 
     print(f'Transaction Manager v{version}')
@@ -212,30 +227,24 @@ elif mode == "express":
         else:
             print("No remove amount specified")
     elif sys.argv[1] == "log":
+        entries = 0
         if arg_count>2:
+            type = ""
             try:
-                argv2 = int(sys.argv[2])
+                arg = int(sys.argv[2])
+                type = "int"
+            except ValueError:
+                type = "str"
+            if type=="int":
                 if int(sys.argv[2])>0:
                     entries = int(sys.argv[2])
-                    with open(log_path,"r") as file_read:
-                        lines = file_read.readlines()
-                        lines = list(reversed(lines))
-                        if len(lines)>0:
-                            print("------------TRANSACTION LOG------------")
-                            for x in range(int(entries)):
-                                try:
-                                    print(lines[x].strip("\n"))
-                                except:
-                                    break
-                        else:
-                            print("No entries in log")
-                        file_read.close()
-            except ValueError:
+                print_transaction_log(entries)
+            elif type=="str" and sys.argv[2] == "clear":
                 open(log_path, 'w').close()
                 print("Transaction log cleared")
-
         else:
-            print("Please specify number of entries")
+            entries = 10
+            print_transaction_log(entries)
     else:
         print("Unknown command. Enter 'help' for a list of commands")
 
