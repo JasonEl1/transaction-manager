@@ -1,4 +1,4 @@
-###   version 0.2.6   ###
+###   version 0.3.0   ###
 
 import subprocess
 import sys
@@ -50,7 +50,7 @@ def print_help():
     print("set <amount> -> set new balance")
     print("add <amount> -> add funds")
     print("remove <amount> -> remove funds")
-    print("note <message> -> add note to log")
+    print("note <message> -> add note to transaction log")
     print("log <entries> -> get most recent transaction log entries")
     print("log clear -> clear all transaction log entries")
     print("-------------")
