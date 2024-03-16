@@ -1,3 +1,5 @@
+###   version 0.2.6   ###
+
 import subprocess
 import sys
 from datetime import datetime
@@ -5,8 +7,6 @@ from os import system
 from os.path import exists
 import os
 
-version = "0.2.5"
-mode = "normal"
 
 fullpath = os.path.abspath(__file__)
 name_len = len(os.path.basename(__file__))
@@ -47,20 +47,10 @@ def print_help():
     print("COMMANDS")
     print("-------------")
     print("get -> get current balance")
-    print("set -> set new balance")
-    print("add -> add funds")
-    print("remove -> remove funds")
-    print("log -> get most recent transaction log entries")
-    print("exit -> exit Transaction Manager")
-    print("-------------")
-
-def print_help_express():
-    print("COMMANDS")
-    print("-------------")
-    print("get -> get current balance")
     print("set <amount> -> set new balance")
     print("add <amount> -> add funds")
     print("remove <amount> -> remove funds")
+    print("note <message> -> add note to log")
     print("log <entries> -> get most recent transaction log entries")
     print("log clear -> clear all transaction log entries")
     print("-------------")
@@ -105,86 +95,17 @@ def print_transaction_log(entries):
         else:
             print("No entries in log")
         file_read.close()
-if mode == "normal":
 
-    print(f'Transaction Manager v{version}')
-    print("enter 'help' for a list of commands")
-    print("-----------------------------------")
 
-    with open(balance_path, "r") as file_read:
-        current_balance = file_read.read()
-        current_balance = float(current_balance)
-        file_read.close()
-    print_balance()
-
-    while(True):
-        command = input()
-
-        with open(balance_path, "r") as file_read:
-            current_balance = file_read.read()
-            current_balance = float(current_balance)
-            file_read.close()
-
-        if command=="help":
-            print_help()
-        elif command == "get":
-            with open(balance_path, "r") as file_read:
-                current_balance = file_read.read()
-                current_balance = float(current_balance)
-                file_read.close()
-            print_balance()
-        elif command == "set":
-            amount = float(input("New balance: "))
-            with open(balance_path, "w") as file_write:
-                file_write.write(str(amount))
-                file_write.close()
-                amount = '%.2f' % amount
-            with open(log_path,"a") as file_write:
-                file_write.write(f"\n{get_datetime()} Balance set to ${amount}.")
-                file_write.close()
-            print(f"Balance set to ${amount}")
-        elif command == "add":
-            amount = float(input("Amount to add: "))
-            add_amount(amount)
-            with open(balance_path, "r") as file_read:
-                current_balance = file_read.read()
-                current_balance = float(current_balance)
-                file_read.close()
-            print_balance()
-        elif command=="remove":
-            amount = float(input("Amount to remove: "))
-            remove_amount(amount)
-            with open(balance_path, "r") as file_read:
-                current_balance = file_read.read()
-                current_balance = float(current_balance)
-                file_read.close()
-            print_balance()
-        elif command=="log":
-            amount = input("Entries to display: ")
-            clean_log()
-            with open(log_path,"r") as file_read:
-                lines = file_read.readlines()
-                for x in range(int(amount)):
-                    try:
-                        print(lines[x])
-                    except:
-                        break
-                file_read.close()
-        elif command=="exit":
-            exit()
-        else:
-            print("Unknown command. Enter 'help' for a list of commands")
-
-elif mode == "express":
-    arg_count = len(sys.argv)
-
+arg_count = len(sys.argv)
+if arg_count > 1:
     with open(balance_path, "r") as file_read:
         current_balance = file_read.read()
         current_balance = float(current_balance)
         file_read.close()
 
     if sys.argv[1]=="help":
-        print_help_express()
+        print_help()
     elif sys.argv[1] == "get":
         with open(balance_path, "r") as file_read:
             current_balance = file_read.read()
@@ -226,6 +147,15 @@ elif mode == "express":
             print_balance()
         else:
             print("No remove amount specified")
+    elif sys.argv[1] == "note":
+        message = sys.argv[2]
+        if arg_count>2:
+            with open(log_path,"a") as file_write:
+                file_write.write(f"\n{get_datetime()} {message}")
+                file_write.close()
+            print(f"Logged: '{message}'")
+        else:
+            print("No note entered")
     elif sys.argv[1] == "log":
         entries = 0
         if arg_count>2:
@@ -247,5 +177,7 @@ elif mode == "express":
             print_transaction_log(entries)
     else:
         print("Unknown command. Enter 'help' for a list of commands")
+else:
+    print(f"Try entering a command")
 
     exit()
