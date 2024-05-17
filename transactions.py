@@ -74,7 +74,7 @@ def remove_amount(amount):
     file_write = open(balance_path,"w")
     amount = float('%.2f' % amount)
     file_write.write(str(current_balance-amount))
-    print(f'removed ${str(amount)} to balance')
+    print(f'removed ${str(amount)} from balance')
     file_write.close()
 
     with open(log_path,"a") as file_write:
